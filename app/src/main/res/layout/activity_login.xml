@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="10dp"
+    tools:context=".LoginActivity">
+
+    <EditText
+        android:id="@+id/username_l"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Username"
+        android:layout_marginTop="50dp"/>
+
+    <EditText
+        android:id="@+id/password_l"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Password"
+        android:layout_marginTop="50dp"
+        android:layout_below="@+id/username_l"/>
+
+    <Button
+        android:id="@+id/login_l"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Accedi"
+        android:layout_marginTop="50dp"
+        android:layout_below="@+id/password_l"/>
+
+    <TextView
+        android:id="@+id/notregistered"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="50dp"
+        android:layout_below="@+id/login_l"
+        android:text="Non sei ancora registrato ?"
+        android:textStyle="bold"
+        android:textSize="20dp"
+        android:textAlignment="center"/>
+
+    <Button
+        android:id="@+id/register_l"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="4dp"
+        android:layout_below="@+id/notregistered"
+        android:text="Registrati"/>
+
+</RelativeLayout>
