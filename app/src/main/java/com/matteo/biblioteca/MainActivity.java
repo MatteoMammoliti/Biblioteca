@@ -54,6 +54,7 @@ public class MainActivity extends AppCompatActivity {
                             {
                                 Toast.makeText(MainActivity.this, "L'utente è stato registrato!", Toast.LENGTH_SHORT).show();
                                 Intent intent = new Intent(getApplicationContext(), HomePageActivity.class);
+                                intent.putExtra("name", username.getText().toString());
                                 startActivity(intent);
                             }
                             else

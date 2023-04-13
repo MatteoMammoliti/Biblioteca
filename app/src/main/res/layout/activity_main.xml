@@ -5,14 +5,29 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:padding="10dp"
+    android:background="@drawable/bg"
     tools:context=".MainActivity">
+
+    <TextView
+        android:id="@+id/title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:drawableLeft="@drawable/icon"
+        android:text="Biblioteca - ITIS Polistena"
+        android:textAlignment="center"
+        android:textColor="@color/white"
+        android:textSize="23dp"
+        android:textStyle="bold" />
 
     <EditText
         android:id="@+id/username"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:hint="Username"
-        android:layout_marginTop="50dp"/>
+        android:textColorHint="@color/white"
+        android:backgroundTint="@color/white"
+        android:layout_marginTop="80dp"/>
 
     <EditText
         android:id="@+id/password"
@@ -20,6 +35,8 @@
         android:layout_height="wrap_content"
         android:hint="Password"
         android:layout_marginTop="50dp"
+        android:textColorHint="@color/white"
+        android:backgroundTint="@color/white"
         android:layout_below="@+id/username"/>
 
     <EditText
@@ -28,6 +45,8 @@
         android:layout_height="wrap_content"
         android:hint="Conferma Password"
         android:layout_marginTop="50dp"
+        android:textColorHint="@color/white"
+        android:backgroundTint="@color/white"
         android:layout_below="@+id/password"/>
     
     <Button
@@ -36,6 +55,7 @@
         android:layout_height="wrap_content"
         android:text="Registrati"
         android:layout_marginTop="50dp"
+        android:backgroundTint="@color/crimison"
         android:layout_below="@+id/cpassword"/>
 
     <TextView
@@ -46,7 +66,8 @@
         android:layout_below="@+id/register"
         android:text="Sei gia registrato ?"
         android:textStyle="bold"
-        android:textSize="20dp"
+        android:textSize="18dp"
+        android:textColor="@color/white"
         android:textAlignment="center"/>
 
     <Button
@@ -54,6 +75,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginLeft="4dp"
+        android:backgroundTint="@color/crimison"
         android:layout_below="@+id/alreadyregistered"
         android:text="Accedi"/>
 

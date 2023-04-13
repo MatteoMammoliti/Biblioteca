@@ -45,6 +45,7 @@ public class LoginActivity extends AppCompatActivity {
                     {
                         Toast.makeText(LoginActivity.this, "Accesso completato. Caricamento.....", Toast.LENGTH_SHORT).show();
                         Intent intent = new Intent(getApplicationContext(), HomePageActivity.class);
+                        intent.putExtra("name", username.getText().toString());
                         startActivity(intent);
                     }
                     else
