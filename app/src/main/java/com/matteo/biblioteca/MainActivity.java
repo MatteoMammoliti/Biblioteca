@@ -11,9 +11,8 @@ import android.widget.Toast;
 
 public class MainActivity extends AppCompatActivity {
 
-    EditText username, password, cpassword;
+    EditText nome, cognome, email, password;
     Button login, register;
-    DBConnection database;
 
 
     @Override
@@ -21,12 +20,12 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        username = (EditText) findViewById(R.id.username);
+        nome = (EditText) findViewById(R.id.nome);
+        cognome = (EditText) findViewById(R.id.cognome);
+        email = (EditText) findViewById(R.id.email);
         password = (EditText) findViewById(R.id.password);
-        cpassword = (EditText) findViewById(R.id.cpassword);
         register = (Button) findViewById(R.id.register);
         login = (Button) findViewById(R.id.login);
-        database = new DBConnection(this);
 
         register.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -34,44 +33,7 @@ public class MainActivity extends AppCompatActivity {
 
                 String user_name = username.getText().toString();
                 String pass = password.getText().toString();
-                String cpass = cpassword.getText().toString();
 
-                if(user_name.equals("") || pass.equals("") || cpass.equals(""))
-                {
-                    Toast.makeText(MainActivity.this, "Compila tutti i campi!", Toast.LENGTH_SHORT).show();
-                }
-                else
-                {
-                    if(pass.equals(cpass))
-                    {
-                        Boolean checkuser = database.checkusername(user_name);
-
-                        if(checkuser == false)
-                        {
-                            Boolean insert = database.insertData(user_name, pass);
-
-                            if(insert == true)
-                            {
-                                Toast.makeText(MainActivity.this, "L'utente è stato registrato!", Toast.LENGTH_SHORT).show();
-                                Intent intent = new Intent(getApplicationContext(), HomePageActivity.class);
-                                intent.putExtra("name", username.getText().toString());
-                                startActivity(intent);
-                            }
-                            else
-                            {
-                                Toast.makeText(MainActivity.this, "Registrazione fallita. Riprovare!", Toast.LENGTH_SHORT).show();
-                            }
-                        }
-                        else
-                        {
-                            Toast.makeText(MainActivity.this, "Utente già registrato. Accedi!", Toast.LENGTH_SHORT).show();
-                        }
-                    }
-                    else
-                    {
-                        Toast.makeText(MainActivity.this, "Le password non coincidono!", Toast.LENGTH_SHORT).show();
-                    }
-                }
             }
         });
 
@@ -84,5 +46,9 @@ public class MainActivity extends AppCompatActivity {
 
             }
         });
+    }
+
+    private void registerNewAccount(String nome, String cognome, String email, String password) {
+
     }
 }
