@@ -17,14 +17,14 @@
         android:text="Biblioteca - ITIS Polistena"
         android:textAlignment="center"
         android:textColor="@color/white"
-        android:textSize="23dp"
+        android:textSize="23sp"
         android:textStyle="bold" />
 
     <EditText
-        android:id="@+id/username_l"
+        android:id="@+id/email_l"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="Username"
+        android:hint="Inserisci il tuo indirizzo e-mail"
         android:textColorHint="@color/white"
         android:backgroundTint="@color/white"
         android:layout_marginTop="80dp"/>
@@ -33,18 +33,29 @@
         android:id="@+id/password_l"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="Password"
+        android:hint="Inserisci la tua password"
         android:layout_marginTop="50dp"
         android:textColorHint="@color/white"
         android:backgroundTint="@color/white"
-        android:layout_below="@+id/username_l"/>
+        android:layout_below="@+id/email_l"/>
+
+    <CheckBox
+        android:id="@+id/loginstate"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Ricordami"
+        android:textColor="@color/white"
+        android:buttonTint="@color/white"
+        android:layout_gravity="center"
+        android:layout_marginTop="10dp"
+        android:layout_below="@+id/password_l"/>
 
     <Button
         android:id="@+id/login_l"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="Accedi"
-        android:layout_marginTop="50dp"
+        android:layout_marginTop="60dp"
         android:backgroundTint="@color/crimison"
         android:layout_below="@+id/password_l"/>
 
