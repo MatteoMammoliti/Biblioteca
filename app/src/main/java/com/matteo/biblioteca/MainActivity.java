@@ -2,6 +2,7 @@ package com.matteo.biblioteca;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
@@ -49,6 +50,13 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void registerNewAccount(String nome, String cognome, String email, String password) {
+        ProgressDialog progressDialog = new ProgressDialog(MainActivity.this);
+        progressDialog.setCancelable(false);
+        progressDialog.setIndeterminate(false);
+        progressDialog.setTitle("Registrazione in corso");
+        progressDialog.show();
+
+        String URL = "localhost";
 
     }
 }

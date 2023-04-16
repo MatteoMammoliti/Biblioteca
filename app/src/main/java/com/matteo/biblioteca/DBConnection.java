@@ -1,71 +1,23 @@
 package com.matteo.biblioteca;
 
-import android.content.ContentValues;
-import android.content.Context;
-import android.database.Cursor;
-import android.database.sqlite.SQLiteOpenHelper;
-import android.database.sqlite.SQLiteDatabase;
+import android.os.StrictMode;
+import java.sql.Connection;
 
-import androidx.annotation.Nullable;
+public class DBConnection {
+    Connection connection;
+    String uname, password, ip, port, database;
 
-public class DBConnection extends SQLiteOpenHelper {
+    public Connection connectionclass() {
 
-    public static final String db_name = "dbbiblioteca";
+        ip = "127.0.0.1";
+        database = "dbbiblioteca";
+        uname = "root";
+        password = "";
+        port = "3306";
 
-    public DBConnection(Context context) {
-        super(context, "dbbiblioteca", null, 1);
+        StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
+        StrictMode.setThreadPolicy(policy);
+
     }
 
-    @Override
-    public void onCreate(SQLiteDatabase MyDB) {
-        MyDB.execSQL("create table utenti(username text primary key, password text)");
-    }
-
-    @Override
-    public void onUpgrade(SQLiteDatabase MyDB, int i, int i1) {
-        MyDB.execSQL("drop table if exists utenti");
-    }
-
-    public Boolean insertData(String username, String password){
-        SQLiteDatabase MyDB = this.getWritableDatabase();
-        ContentValues contentValues = new ContentValues();
-        contentValues.put("username", username);
-        contentValues.put("password", password);
-        long result = MyDB.insert("utenti", null, contentValues);
-
-        if(result == -1)
-        {
-            return false;
-        }
-        else
-        {
-            return true;
-        }
-    }
-
-    public boolean checkusername(String username) {
-        SQLiteDatabase MyDB = this.getWritableDatabase();
-        Cursor cursor = MyDB.rawQuery("Select * from utenti where username =?", new String[] {username});
-        if(cursor.getCount()>0)
-        {
-            return true;
-        }
-        else
-        {
-            return false;
-        }
-    }
-
-    public boolean checkusernamepassword(String username, String password) {
-        SQLiteDatabase MyDB = this.getWritableDatabase();
-        Cursor cursor = MyDB.rawQuery("Select * from utenti where username =? and password = ?", new String[] {username, password});
-        if(cursor.getCount()>0)
-        {
-            return true;
-        }
-        else
-        {
-            return false;
-        }
-    }
 }
