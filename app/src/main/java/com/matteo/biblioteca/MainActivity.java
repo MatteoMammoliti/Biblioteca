@@ -1,5 +1,6 @@
 package com.matteo.biblioteca;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -15,9 +16,11 @@ import android.widget.Toast;
 import com.android.volley.AuthFailureError;
 import com.android.volley.DefaultRetryPolicy;
 import com.android.volley.Request;
+import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
+import com.android.volley.toolbox.Volley;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -26,7 +29,7 @@ public class MainActivity extends AppCompatActivity {
 
     EditText nome, cognome, email, password;
     Button login, register;
-
+    private static final String url = "https://192.168.1.12/dashboard/bibliotecaApp/register.php";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,7 +46,7 @@ public class MainActivity extends AppCompatActivity {
         register.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
+                registerNewAccount(nome.getText().toString(), cognome.getText().toString(), email.getText().toString(), password.getText().toString());
             }
         });
 
@@ -58,52 +61,38 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
-    private void registerNewAccount(String nome, String cognome, String email, String password) {
-        ProgressBar progressBar= new ProgressBar(MainActivity.this);
-        //TODO progressBar.setCancelable(false);
-        progressBar.setIndeterminate(false);
-        //TODO progressBar.setTitle("Registrazione in corso");
-        progressBar.setVisibility(View.VISIBLE);
-
-        String URL = "localhost/dashboard/bibliotecaApp/register.php";
-        StringRequest request = new StringRequest(Request.Method.POST, URL, new Response.Listener<String>() {
+    public void registerNewAccount(final String nome, final String cognome, final String email, final String password) {
+        StringRequest request = new StringRequest(Request.Method.POST, url, new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
-                if (response.equals("Successfully Registered"))
-                {
-                    //TODO progressBar.dismiss();
-                    Toast.makeText(MainActivity.this, response, Toast.LENGTH_SHORT).show();
-                    startActivity(new Intent(MainActivity.this, LoginActivity.class));
-                    finish();
-                }
-                else
-                {
-                    //TODO progressDialog.dismiss();
-                    Toast.makeText(MainActivity.this, response, Toast.LENGTH_SHORT).show();
-                }
+
+                Toast.makeText(getApplicationContext(), response, Toast.LENGTH_SHORT).show();
+
             }
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                //TODO progressDialog.dismiss();
-                Toast.makeText(MainActivity.this, error.toString(), Toast.LENGTH_SHORT).show();
+
+                Toast.makeText(getApplicationContext(), error.toString(), Toast.LENGTH_SHORT).show();
 
             }
         }) {
 
+            @Nullable
             @Override
             protected Map<String, String> getParams() throws AuthFailureError {
-                HashMap<String, String> param = new HashMap<>();
-                param.put("nome", nome);
-                param.put("cognome", cognome);
-                param.put("email", email);
-                param.put("password", password);
-                return param;
+                Map<String, String> map = new HashMap<String, String>();
+                map.put("nome", nome);
+                map.put("cognome", cognome);
+                map.put("email", email);
+                map.put("password", password);
+                return map;
+
             }
         };
 
-        request.setRetryPolicy(new DefaultRetryPolicy(3000, DefaultRetryPolicy.DEFAULT_MAX_RETRIES, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
-        MySingleton.getmInstance(MainActivity.this).addToRequestQueue(request);
+        RequestQueue queue = Volley.newRequestQueue(getApplicationContext());
+        queue.add(request);
 
     }
 }

@@ -15,7 +15,6 @@ public class LoginActivity extends AppCompatActivity {
 
     EditText email, password;
     Button login, register;
-    CheckBox loginState;
 
 
     @Override
@@ -27,13 +26,12 @@ public class LoginActivity extends AppCompatActivity {
         password = (EditText) findViewById(R.id.password_l);
         login = (Button) findViewById(R.id.login_l);
         register = (Button) findViewById(R.id.register_l);
-        loginState = (CheckBox) findViewById(R.id.loginstate);
 
         login.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                startActivity(new Intent(LoginActivity.this, MainActivity.class));
-                finish();
+                //TODO
+
             }
         });
 
