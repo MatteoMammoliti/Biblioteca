@@ -26,10 +26,9 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class MainActivity extends AppCompatActivity {
-
     EditText nome, cognome, email, password;
     Button login, register;
-    private static final String url = "https://192.168.1.12/dashboard/bibliotecaApp/register.php";
+    private static final String url = "https://www.confsalvvff.it/php/register.php";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
