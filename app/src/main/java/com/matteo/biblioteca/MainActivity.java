@@ -46,6 +46,8 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 registerNewAccount(nome.getText().toString(), cognome.getText().toString(), email.getText().toString(), password.getText().toString());
+                Intent intent = new Intent(getApplicationContext(), HomePageActivity.class);
+                startActivity(intent);
             }
         });
 
