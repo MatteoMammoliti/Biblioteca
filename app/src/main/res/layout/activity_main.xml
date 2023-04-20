@@ -55,6 +55,7 @@
         android:layout_height="wrap_content"
         android:hint="Inserisci la tua password"
         android:layout_marginTop="20dp"
+        android:inputType="textPassword"
         android:textColorHint="@color/white"
         android:backgroundTint="@color/white"
         android:layout_below="@+id/email"/>
