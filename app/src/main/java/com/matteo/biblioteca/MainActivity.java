@@ -1,99 +1,153 @@
 package com.matteo.biblioteca;
 
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.ProgressDialog;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ProgressBar;
 import android.widget.Toast;
 
-import com.android.volley.AuthFailureError;
-import com.android.volley.DefaultRetryPolicy;
-import com.android.volley.Request;
-import com.android.volley.RequestQueue;
-import com.android.volley.Response;
-import com.android.volley.VolleyError;
-import com.android.volley.toolbox.StringRequest;
-import com.android.volley.toolbox.Volley;
-
-import java.util.HashMap;
-import java.util.Map;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class MainActivity extends AppCompatActivity {
-    EditText nome, cognome, email, password;
+    EditText email, password;
     Button login, register;
-    private static final String url = "https://www.confsalvvff.it/php/register.php";
+    ProgressDialog progressDialog;
+    String SharedPreferences = "myfref_xml";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        nome = (EditText) findViewById(R.id.nome);
-        cognome = (EditText) findViewById(R.id.cognome);
         email = (EditText) findViewById(R.id.email);
         password = (EditText) findViewById(R.id.password);
         register = (Button) findViewById(R.id.register);
         login = (Button) findViewById(R.id.login);
+        progressDialog = new ProgressDialog(this);
+
+        SharedPreferences sharedPreferences = getSharedPreferences(SharedPreferences, MODE_PRIVATE);
+        String emailPref = sharedPreferences.getString("email" ,null);
+        String rolePref = sharedPreferences.getString("role" ,null);
+
+        if(emailPref != null)
+        {
+            if(rolePref.equals("Utente"))
+            {
+                Intent intent = new Intent(getApplicationContext(), UserHomePageActivity.class);
+                startActivity(intent);
+                finish();
+            }
+            else if(rolePref.equals("Admin"))
+            {
+                Intent intent = new Intent(getApplicationContext(), AdminHomePageActvity.class);
+                startActivity(intent);
+                finish();
+            }
+        }
+
+        login.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view)
+            {
+                if(email.getText().toString().equals(""))
+                {
+                    email.setError("L'indirizzo e-mail è obbligatorio. Compila tutti i campi");
+                }
+                else if(password.getText().toString().equals(""))
+                {
+                    password.setError("La password è obbligatoria. Compila tutti i campi");
+                }
+                else
+                {
+                    progressDialog.setTitle("Accesso in corso...");
+                    progressDialog.setCanceledOnTouchOutside(false);
+                    progressDialog.setCancelable(false);
+                    progressDialog.show();
+                    login();
+                }
+            }
+        });
 
         register.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                registerNewAccount(nome.getText().toString(), cognome.getText().toString(), email.getText().toString(), password.getText().toString());
-                Intent intent = new Intent(getApplicationContext(), HomePageActivity.class);
-                startActivity(intent);
-            }
-        });
 
-        login.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-
-                Intent intent = new Intent(getApplicationContext(), LoginActivity.class);
+                Intent intent = new Intent(getApplicationContext(), RegisterActivity.class);
                 startActivity(intent);
 
             }
         });
     }
 
-    public void registerNewAccount(final String nome, final String cognome, final String email, final String password) {
-        StringRequest request = new StringRequest(Request.Method.POST, url, new Response.Listener<String>() {
-            @Override
-            public void onResponse(String response) {
+    void login()
+    {
+        String emailParameter = email.getText().toString();
+        String passwordParameter =password.getText().toString();
 
-                Toast.makeText(getApplicationContext(), response, Toast.LENGTH_SHORT).show();
+        Call<ResponseFormServer> call = ConnectionDatabase.getClient().create(Methods.class).loginMethod(emailParameter, passwordParameter);
+        call.enqueue(new Callback<ResponseFormServer>() {
+            @Override
+            public void onResponse(Call<ResponseFormServer> call, Response<ResponseFormServer> response) {
+
+                if(response.code() == 200)
+                {
+                    if(response.body().getStatus().equals("OK"))
+                    {
+                        if(response.body().getResultCode() == 1)
+                        {
+                            SharedPreferences sharedPreferences = getSharedPreferences(SharedPreferences, MODE_PRIVATE);
+                            SharedPreferences.Editor editor = sharedPreferences.edit();
+
+                            editor.putString("email", response.body().getEmail());
+                            editor.putString("role", response.body().getRole());
+                            editor.apply();
+
+                            Toast.makeText(getApplicationContext(), "Benvenuto", Toast.LENGTH_LONG).show();
+                            String role = response.body().getRole();
+
+                            switch (role)
+                            {
+                                case "Utente":
+                                    Intent intent = new Intent(getApplicationContext(), UserHomePageActivity.class);
+                                    startActivity(intent);
+                                    finish();
+                                    progressDialog.dismiss();
+                                    break;
+
+                                case "Admin":
+                                    Intent i = new Intent(getApplicationContext(), AdminHomePageActvity.class);
+                                    startActivity(i);
+                                    finish();
+                                    progressDialog.dismiss();
+                                    break;
+                            }
+                        }
+                        else
+                        {
+                            Toast.makeText(getApplicationContext(), "Accesso fallito. Credenziali errate!", Toast.LENGTH_LONG).show();
+                        }
+                    }
+                }
+                else
+                {
+
+
+                }
 
             }
-        }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
 
-                Toast.makeText(getApplicationContext(), error.toString(), Toast.LENGTH_SHORT).show();
+            @Override
+            public void onFailure(Call<ResponseFormServer> call, Throwable t) {
 
             }
-        }) {
-
-            @Nullable
-            @Override
-            protected Map<String, String> getParams() throws AuthFailureError {
-                Map<String, String> map = new HashMap<String, String>();
-                map.put("nome", nome);
-                map.put("cognome", cognome);
-                map.put("email", email);
-                map.put("password", password);
-                return map;
-
-            }
-        };
-
-        RequestQueue queue = Volley.newRequestQueue(getApplicationContext());
-        queue.add(request);
+        });
 
     }
 }
