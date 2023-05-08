@@ -4,6 +4,7 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.annotation.SuppressLint;
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
@@ -14,7 +15,6 @@ import android.widget.Toast;
 import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
-import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
@@ -22,12 +22,15 @@ import com.android.volley.toolbox.Volley;
 import java.util.HashMap;
 import java.util.Map;
 
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+
 public class RegisterActivity extends AppCompatActivity {
 
     EditText nome, cognome, email, password;
     Button login, register;
-    private static final String url = "https://www.confsalvvff.it/php/login.php";
-
+    ProgressDialog progressDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,14 +43,32 @@ public class RegisterActivity extends AppCompatActivity {
         password = (EditText) findViewById(R.id.password_r);
         login = (Button) findViewById(R.id.login_r);
         register = (Button) findViewById(R.id.register_r);
+        progressDialog = new ProgressDialog(this);
 
         register.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                register(email.getText().toString(), password.getText().toString());
-                Intent intent = new Intent(getApplicationContext(), MainActivity.class);
-                startActivity(intent);
 
+                if(email.getText().toString().equals(""))
+                {
+                    email.setText("Indirizzo email richiesto. Compila tutti i campi!");
+                }
+                else if(password.getText().toString().equals(""))
+                {
+                    password.setText("Indirizzo email richiesto. Compila tutti i campi!");
+                }
+                else if(nome.getText().toString().equals(""))
+                {
+                    nome.setText("Indirizzo email richiesto. Compila tutti i campi!");
+                }
+                else
+                {
+                    progressDialog.setTitle("Registrazione in corso...");
+                    progressDialog.setCanceledOnTouchOutside(false);
+                    progressDialog.setCancelable(false);
+                    progressDialog.show();
+                    register();
+                }
             }
         });
 
@@ -62,36 +83,50 @@ public class RegisterActivity extends AppCompatActivity {
         });
     }
 
-    void register(final String email, final String password) {
-        StringRequest request = new StringRequest(Request.Method.POST, url, new Response.Listener<String>() {
-            @Override
-            public void onResponse(String response) {
+    void register() {
 
-                Toast.makeText(getApplicationContext(), response, Toast.LENGTH_SHORT).show();
+        String nomeParameter = nome.getText().toString();
+        String cognomeParameter = cognome.getText().toString();
+        String emailParameter = email.getText().toString();
+        String passwordParameter =password.getText().toString();
+
+        Call<ResponseFormServer> call = ConnectionDatabase.getClient().create(Methods.class).
+                registerMethod(nomeParameter, cognomeParameter, emailParameter, passwordParameter);
+
+        call.enqueue(new Callback<ResponseFormServer>() {
+            @Override
+            public void onResponse(Call<ResponseFormServer> call, Response<ResponseFormServer> response) {
+
+                if(response.code() == 200)
+                {
+                    if(response.body().getStatus().equals("OK"))
+                    {
+                        if(response.body().getResultCode() == 1)
+                        {
+                            Toast.makeText(getApplicationContext(), "Utente registrato. Benvenuto!", Toast.LENGTH_LONG).show();
+                            progressDialog.dismiss();
+                        }
+                        else
+                        {
+                            Toast.makeText(getApplicationContext(), "L'utente esiste già. Accedi!", Toast.LENGTH_LONG).show();
+                            progressDialog.dismiss();
+                        }
+                    }
+                }
+                else
+                {
+                    //se non è 200
+                }
 
             }
-        }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
 
-                Toast.makeText(getApplicationContext(), error.toString(), Toast.LENGTH_SHORT).show();
+            @Override
+            public void onFailure(Call<ResponseFormServer> call, Throwable t) {
+
+
 
             }
-        }) {
-
-            @Nullable
-            @Override
-            protected Map<String, String> getParams() throws AuthFailureError {
-                Map<String, String> map = new HashMap<String, String>();
-                map.put("email", email);
-                map.put("password", password);
-                return map;
-
-            }
-        };
-
-        RequestQueue queue = Volley.newRequestQueue(getApplicationContext());
-        queue.add(request);
+        });
 
     }
 }

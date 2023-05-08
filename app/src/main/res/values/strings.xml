@@ -1,3 +1,32 @@
 <resources>
     <string name="app_name">Biblioteca</string>
+
+    <array name="generi">
+
+        <item>Fantasy</item>
+        <item>Horror</item>
+        <item>Storico</item>
+        <item>Giallo</item>
+        <item>Diario</item>
+        <item>Viaggi</item>
+        <item>Umorismo</item>
+        <item>Romanzo</item>
+        <item>Fantascienza</item>
+
+    </array>
+
+    <array name="scaffale">
+
+        <item>Scaffale 1</item>
+        <item>Scaffale 2</item>
+        <item>Scaffale 3</item>
+        <item>Scaffale 4</item>
+        <item>Scaffale 5</item>
+        <item>Scaffale 6</item>
+        <item>Scaffale 7</item>
+        <item>Scaffale 8</item>
+        <item>Scaffale 9</item>
+        <item>Scaffale 10</item>
+
+    </array>
 </resources>

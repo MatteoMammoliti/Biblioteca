@@ -16,6 +16,8 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 public class MainActivity extends AppCompatActivity {
+
+    //Dichiarazione dei cambi di input
     EditText email, password;
     Button login, register;
     ProgressDialog progressDialog;
@@ -46,7 +48,7 @@ public class MainActivity extends AppCompatActivity {
             }
             else if(rolePref.equals("Admin"))
             {
-                Intent intent = new Intent(getApplicationContext(), AdminHomePageActvity.class);
+                Intent intent = new Intent(getApplicationContext(), AdminProfileActvity.class);
                 startActivity(intent);
                 finish();
             }
@@ -122,7 +124,7 @@ public class MainActivity extends AppCompatActivity {
                                     break;
 
                                 case "Admin":
-                                    Intent i = new Intent(getApplicationContext(), AdminHomePageActvity.class);
+                                    Intent i = new Intent(getApplicationContext(), AdminProfileActvity.class);
                                     startActivity(i);
                                     finish();
                                     progressDialog.dismiss();
@@ -138,6 +140,7 @@ public class MainActivity extends AppCompatActivity {
                 else
                 {
 
+                    //NESSUNA CONNESSIONE
 
                 }
 
@@ -148,6 +151,5 @@ public class MainActivity extends AppCompatActivity {
 
             }
         });
-
     }
 }

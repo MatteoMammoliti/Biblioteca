@@ -9,7 +9,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
-public class AdminHomePageActvity extends AppCompatActivity {
+public class AdminProfileActvity extends AppCompatActivity {
 
     TextView tipologia, email;
     Button logout;
@@ -18,11 +18,10 @@ public class AdminHomePageActvity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_admin_home_page_actvity);
+        setContentView(R.layout.activity_admin_profile);
 
         tipologia = findViewById(R.id.admintipologia);
         email = findViewById(R.id.adminemail);
-        logout = findViewById(R.id.logoutadmin);
 
         android.content.SharedPreferences sharedPreferences = getSharedPreferences(SharedPreferences, MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPreferences.edit();
