@@ -9,124 +9,85 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class MainActivity extends AppCompatActivity {
+public class AdminLoginActivity extends AppCompatActivity {
 
-    //Dichiarazione dei campi di input
     EditText email, password;
-    Button login, register, adminLogin;
+    Button login;
     ProgressDialog progressDialog;
     String SharedPreferences = "myfref_xml";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.activity_admin_login);
 
-        //Dichiarazione delle variabili
-        email = (EditText) findViewById(R.id.email);
-        password = (EditText) findViewById(R.id.password);
-        register = (Button) findViewById(R.id.register);
-        login = (Button) findViewById(R.id.login);
+        email = (EditText) findViewById(R.id.email_admin);
+        password = (EditText) findViewById(R.id.password_admin);
+        login = (Button) findViewById(R.id.login_admin);
         progressDialog = new ProgressDialog(this);
-        adminLogin = findViewById(R.id.admin_login);
 
-        //Creazione del file per il salvataggio automatico delle credenziali per il secondo accesso
-        SharedPreferences sharedPreferences = getSharedPreferences(SharedPreferences, MODE_PRIVATE);
+        android.content.SharedPreferences sharedPreferences = getSharedPreferences(SharedPreferences, MODE_PRIVATE);
         String emailPref = sharedPreferences.getString("email", null);
         String rolePref = sharedPreferences.getString("role", null);
 
-        // Accesso automatico se l'email è salvata
         if (emailPref != null)
         {
-            if (rolePref.equals("Utente"))
+            if (rolePref.equals("Admin"))
             {
-                Intent intent = new Intent(getApplicationContext(), UserHomePageActivity.class);
+                Intent intent = new Intent(getApplicationContext(), AdminHomePage.class);
                 startActivity(intent);
                 finish();
             }
         }
 
-        // Passaggio all'activity di login per l'amministratore
-        adminLogin.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-                Intent intent = new Intent(getApplicationContext(), AdminLoginActivity.class);
-                startActivity(intent);
-
-            }
-        });
-
-        // Passaggio all'activity di login
         login.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View view)
+            public void onClick(View v)
             {
-                //Se il campo email è vuoto
                 if(email.getText().toString().equals(""))
                 {
-                    // Errore
                     email.setError("L'indirizzo e-mail è obbligatorio. Compila tutti i campi");
                 }
-                //Se il campo email è vuoto
                 else if(password.getText().toString().equals(""))
                 {
-                    // Errore
                     password.setError("La password è obbligatoria. Compila tutti i campi");
                 }
                 else
                 {
-                    //Se i campi sono entrambi riempiti
                     progressDialog.setTitle("Accesso in corso...");
                     progressDialog.setCanceledOnTouchOutside(false);
                     progressDialog.setCancelable(false);
                     progressDialog.show();
-                    login(); //Login
+                    login();
                 }
-            }
-        });
-
-        // Passaggio all'activity di registrazione
-        register.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-
-                Intent intent = new Intent(getApplicationContext(), RegisterActivity.class);
-                startActivity(intent);
-
             }
         });
     }
 
-    //Funzione di Login
     void login()
     {
-
-        //Ottenimento dei valori dai campi di input
         String emailParameter = email.getText().toString();
         String passwordParameter =password.getText().toString();
 
-        //Richiamo del metodo di login dall'API di login
-        Call<ResponseFormServer> call = ConnectionDatabase.getClient().create(Methods.class).loginMethod(emailParameter, passwordParameter);
+        Call<ResponseFormServer> call = ConnectionDatabase.getClient().create(Methods.class).loginAdminMethod(emailParameter, passwordParameter);
         call.enqueue(new Callback<ResponseFormServer>() {
             @Override
             public void onResponse(Call<ResponseFormServer> call, Response<ResponseFormServer> response) {
 
-                //Se la chiamata va a buon fine
                 if(response.code() == 200)
                 {
                     if(response.body().getStatus().equals("OK"))
                     {
-                        //Se la select trova un match nel DB
                         if(response.body().getResultCode() == 1)
                         {
-                            //Salvataggio automatico delle credenziali
+
                             SharedPreferences sharedPreferences = getSharedPreferences(SharedPreferences, MODE_PRIVATE);
                             SharedPreferences.Editor editor = sharedPreferences.edit();
 
@@ -137,19 +98,16 @@ public class MainActivity extends AppCompatActivity {
                             Toast.makeText(getApplicationContext(), "Benvenuto", Toast.LENGTH_LONG).show();
                             String role = response.body().getRole();
 
-                            //Accesso
                             switch (role)
                             {
-                                case "Utente":
-                                    Intent intent = new Intent(getApplicationContext(), UserHomePageActivity.class);
+                                case "Admin":
+                                    Intent intent = new Intent(getApplicationContext(), AdminHomePage.class);
                                     startActivity(intent);
                                     finish();
                                     progressDialog.dismiss();
                                     break;
                             }
                         }
-
-                        //Se la select non trova alcun match nel DB
                         else
                         {
                             Toast.makeText(getApplicationContext(), "Accesso fallito. Credenziali errate!", Toast.LENGTH_LONG).show();

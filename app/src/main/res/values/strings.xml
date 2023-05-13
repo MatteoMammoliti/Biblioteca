@@ -3,6 +3,7 @@
 
     <array name="generi">
 
+        <item>Seleziona</item>
         <item>Fantasy</item>
         <item>Horror</item>
         <item>Storico</item>
@@ -17,6 +18,7 @@
 
     <array name="scaffale">
 
+        <item>Seleziona</item>
         <item>Scaffale 1</item>
         <item>Scaffale 2</item>
         <item>Scaffale 3</item>

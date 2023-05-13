@@ -104,6 +104,9 @@ public class RegisterActivity extends AppCompatActivity {
                         if(response.body().getResultCode() == 1)
                         {
                             Toast.makeText(getApplicationContext(), "Utente registrato. Benvenuto!", Toast.LENGTH_LONG).show();
+                            Intent intent = new Intent(getApplicationContext(), UserHomePageActivity.class);
+                            startActivity(intent);
+                            finish();
                             progressDialog.dismiss();
                         }
                         else
@@ -123,7 +126,7 @@ public class RegisterActivity extends AppCompatActivity {
             @Override
             public void onFailure(Call<ResponseFormServer> call, Throwable t) {
 
-
+                //se non è 200
 
             }
         });

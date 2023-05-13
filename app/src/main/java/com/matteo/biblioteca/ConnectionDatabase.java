@@ -5,7 +5,7 @@ import retrofit2.converter.gson.GsonConverterFactory;
 
 public class ConnectionDatabase {
 
-    private static final String URL="https://www.confsalvvff.it/php/login.php";
+    private static final String URL="https://www.confsalvvff.it/";
     private static Retrofit retrofit = null;
 
     public static Retrofit getClient()
