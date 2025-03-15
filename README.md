@@ -1,0 +1,1 @@
+Android mobile application built in Android Studio. The main goal was to automate the school library using a simple database (MySQL as DBMS) that allows users to perform actions such as reserving or borrowing a book.
